@@ -1,0 +1,55 @@
+/*Global styles*/
+body {
+	font-family: 'Lato', sans-serif;
+	/*font-size: 15px;*/
+}
+#container {
+	margin-left: auto;
+	margin-right: auto;
+	width: 52%;
+	padding: 20px 10px;
+	background-color: yellow;
+	border: solid red;		
+}
+#contener_title_of_list {
+	font-size: 20px;
+	margin: 10px 0px;	
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #15a68b;
+}
+#contener_list_with_task {
+	display: flex;
+	margin: 5px 0px;
+	padding: 10px 3px;
+	border: solid blue;
+}
+
+.one_list_task_accept {
+
+	color: green;
+	font-weight: bold;			
+}
+
+#contener_options {
+	display: flex;
+	margin: 10px 0px;
+	padding: 5px 0px;
+	flex-direction:row;
+	justify-content: space-around;
+	border: solid green;
+}
+#edit_task {
+	width:50%;
+}
+
+.button_to_edit_element_list {
+	margin: 0px 8px;
+}
+
+
+
+
+
+
