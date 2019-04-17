@@ -7,14 +7,29 @@ var $button_edit_task;
 var $button_complete;
 
 function main(){
-
+    // debugger;
 	$taskList = document.getElementById("task_list");	
 	$newTask = document.getElementById("edit_task");
 	$confirmButton = document.getElementById("confirm_button");
 	
 	$taskList.addEventListener('click', listClickManager);
 	$confirmButton.addEventListener('click',addTaskButtonClickHandler);
-	
+    
+    getTodos();
+}
+
+function getTodos(){
+    axios('http://195.181.210.249:3000/todo/')
+    .then(response =>response.data)
+    .then(data=>{
+        data.forEach(element => {
+            addUpdateListTask($taskList, element.title, element.id)
+        // data.addUpdateListTask($taskList, element.title);
+
+
+        
+        });
+    })
 }
 
 
@@ -23,14 +38,24 @@ function addTaskButtonClickHandler(){
 	var newTask=$newTask.value;
 
 	if(newTask) {
-		addUpdateListTask($taskList,newTask)
+        // addUpdateListTask($taskList,newTask)
+        axios.post('http://195.181.210.249:3000/todo/', {
+            title: newTask,
+            author: 'Damian-Mechanik'
+          })
+          .then(function () {
+            $taskList.innerHTML = '';
+            // console.log(response);
+            getTodos();
+          });
 		newTask="";		
 	}
 }
 
-function addUpdateListTask(list,task_tekst){
+function addUpdateListTask(list,task_tekst,id){
 
-	var $newItemsList= document.createElement('li');
+    var $newItemsList= document.createElement('li');
+    $newItemsList.dataset.id=id;
 
     var checkbox_element = document.createElement('INPUT');
     checkbox_element.setAttribute("type", "checkbox");
@@ -103,8 +128,16 @@ function canelTaskHandler(event) {
 
 	var elementLI=event.target.parentElement;
 	elementLI.remove();
-	debugger;
+    debugger;
+    
+    // axios.delete('http://195.181.210.249:3000/todo/', {
+            // id: elementLI.id,
+            // author: 'Damian-Mechanik'
+        //   });
 
+        //   elementLI.remove();
+
+         
 }
 
 function listClickManager(event) {
