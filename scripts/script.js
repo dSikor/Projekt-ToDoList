@@ -15,7 +15,7 @@ function main(){
 	$taskList.addEventListener('click', listClickManager);
 	$confirmButton.addEventListener('click',addTaskButtonClickHandler);
     
-    getTodos();
+    // getTodos();
 }
 
 function getTodos(){
