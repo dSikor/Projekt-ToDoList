@@ -56,7 +56,7 @@ function addUpdateListTask(list,task_tekst,id){
 
     var $newItemsList= document.createElement('li');
     $newItemsList.dataset.id=id;
-
+    debugger;
     var checkbox_element = document.createElement('INPUT');
     checkbox_element.setAttribute("type", "checkbox");
 
@@ -125,19 +125,14 @@ function acceptChangeHandler(event) {
 }
 
 function canelTaskHandler(event) {
-
-	var elementLI=event.target.parentElement;
-	elementLI.remove();
+    var $idElementToDo=event.target.parentElement.id;
     debugger;
-    
-    // axios.delete('http://195.181.210.249:3000/todo/', {
-            // id: elementLI.id,
-            // author: 'Damian-Mechanik'
-        //   });
-
-        //   elementLI.remove();
-
-         
+    axios.delete('http://195.181.210.249:3000/todo/' + $idElementToDo, {})
+    .then(function () {
+        $taskList.innerHTML = '';
+        // console.log(response);
+        getTodos();
+      });       
 }
 
 function listClickManager(event) {
