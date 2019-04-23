@@ -6,6 +6,8 @@ var $input_edit_in_List;
 var $button_edit_task;
 var $button_complete;
 
+var $idElementToDo;
+
 function main(){
     // debugger;
 	$taskList = document.getElementById("task_list");	
@@ -23,13 +25,13 @@ function getTodos(){
     .then(response =>response.data)
     .then(data=>{
         data.forEach(element => {
-            addUpdateListTask($taskList, element.title, element.id)
+            addUpdateListTask($taskList, element.title, element.id,element.description)
         // data.addUpdateListTask($taskList, element.title);
 
 
         
         });
-    })
+    });
 }
 
 
@@ -41,7 +43,8 @@ function addTaskButtonClickHandler(){
         // addUpdateListTask($taskList,newTask)
         axios.post('http://195.181.210.249:3000/todo/', {
             title: newTask,
-            author: 'Damian-Mechanik'
+            author: 'Damian-Mechanik',
+            description: "Nie wykonane" 
           })
           .then(function () {
             $taskList.innerHTML = '';
@@ -52,14 +55,18 @@ function addTaskButtonClickHandler(){
 	}
 }
 
-function addUpdateListTask(list,task_tekst,id){
+function addUpdateListTask(list,task_tekst,id,stan_zadania){
 
     var $newItemsList= document.createElement('li');
     $newItemsList.dataset.id=id;
     debugger;
     var checkbox_element = document.createElement('INPUT');
     checkbox_element.setAttribute("type", "checkbox");
-
+    if(stan_zadania ==='Wykonane')
+    {
+        checkbox_element.checked=true;
+        $newItemsList.classList.toggle('one_list_task_accept');
+    }
 
 	var textElement = document.createElement('span');
 
@@ -122,17 +129,31 @@ function acceptChangeHandler(event) {
     $textElement.textContent = $changeInput.value;
     $textElement.style.display = '';
     $editButton.style.display = 'inline-block';
+
+    debugger;
+    $idElementToDo=event.target.parentElement.dataset.id;
+    axios.put('http://195.181.210.249:3000/todo/' + $idElementToDo,{
+
+        title: $textElement.textContent,
+
+    })
+    .then(function (){
+        $taskList.innerHTML = '';
+        getTodos();
+    });
+    // $idElementToDo=" ";
+
 }
 
 function canelTaskHandler(event) {
-    var $idElementToDo=event.target.parentElement.id;
+     $idElementToDo=event.target.parentElement.dataset.id;
     debugger;
     axios.delete('http://195.181.210.249:3000/todo/' + $idElementToDo, {})
     .then(function () {
         $taskList.innerHTML = '';
-        // console.log(response);
         getTodos();
-      });       
+      });   
+          
 }
 
 function listClickManager(event) {
@@ -151,7 +172,41 @@ function listClickManager(event) {
 
 	    if(event.target.getAttribute('type') === 'checkbox') {
 	       debugger;
-	     	 event.target.parentElement.classList.toggle('one_list_task_accept');
+              event.target.parentElement.classList.toggle('one_list_task_accept');
+              
+              $idElementToDo=event.target.parentElement.dataset.id;
+              if(event.target.checked)
+              {
+               
+               
+                axios.put('http://195.181.210.249:3000/todo/' + $idElementToDo,{
+
+                    description: "Wykonane"
+
+                })
+                .then(function (){
+                $taskList.innerHTML = '';
+                getTodos();
+                }); 
+                
+            console.log("zadanie wykonane");
+            debugger;
+            }else
+            {
+                axios.put('http://195.181.210.249:3000/todo/' + $idElementToDo,{
+
+                    description: "Nie wykonane"
+
+                })
+                .then(function (){
+                $taskList.innerHTML = '';
+                getTodos();
+                }); 
+                
+                console.log("zadanie nie wykonane");
+                debugger;
+            }
+
         }
 
 	}
